@@ -4,6 +4,8 @@
 
 // Traveling Salesman Problem
 
+// Traveling Salesman Problem using nearest neighbour algorithm
+
 struct Graph
 {
 	int** adjList;
@@ -44,6 +46,7 @@ void printGraph(struct Graph* graph)
 	}
 }
 
+// helper function to check if array contains given value
 int arrayContains(int* array, int value)
 {
 	int i;
@@ -54,6 +57,7 @@ int arrayContains(int* array, int value)
 	return 0;
 }
 
+// helper function to find lowest nonvisited value in array
 int arrayMinIndex(int* array, int* visited)
 {
 	int i, min = 1000, minInd = -1;
