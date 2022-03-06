@@ -4,8 +4,6 @@
 
 // Traveling Salesman Problem
 
-// Traveling Salesman Problem using nearest neighbour algorithm
-
 struct Graph
 {
 	int** adjList;
@@ -13,13 +11,17 @@ struct Graph
 
 struct Graph* createGraph()
 {
+	// allocating graph and adjList
 	struct Graph* graph = malloc(sizeof(struct Graph));
 	graph->adjList = malloc(N * sizeof(int*));
 	
 	int i, j;
+	
+	// allocating every array in adjList
 	for(i = 0; i < N; i++)
 		graph->adjList[i] = malloc(N * sizeof(int));
 	
+	// filling adjList with 0s
 	for(i = 0; i < N; i++)
 		for(j = 0; j < N; j++)
 			graph->adjList[i][j] = 0;
@@ -27,6 +29,7 @@ struct Graph* createGraph()
 	return graph;
 }
 
+// adding edges to a non-oriented graph
 void addEdge(struct Graph* graph, int src, int dest, int weight)
 {
 	graph->adjList[src][dest] = weight;
@@ -36,17 +39,15 @@ void addEdge(struct Graph* graph, int src, int dest, int weight)
 void printGraph(struct Graph* graph)
 {
 	int i, j;
-	
 	for(i = 0; i < N; i++)
 	{
 		for(j = 0; j < N; j++)
 			printf("%d ", graph->adjList[i][j]);
-		
 		printf("\n");
 	}
 }
 
-// helper function to check if array contains given value
+// finding if array contains given value
 int arrayContains(int* array, int value)
 {
 	int i;
@@ -57,18 +58,21 @@ int arrayContains(int* array, int value)
 	return 0;
 }
 
-// helper function to find lowest nonvisited value in array
 int arrayMinIndex(int* array, int* visited)
 {
+	// setting minimum to 1000
 	int i, min = 1000, minInd = -1;
 	int* cpArray = malloc(N * sizeof(int*));
 	
+	// copying argument array
 	for(i = 0; i < N; i++) cpArray[i] = array[i];
 	
+	// setting values of visited nodes to 1000
 	for(i = 0; i < N; i++)
 		if(arrayContains(visited, i)) 
 			cpArray[i] = 1000;
 	
+	// finding index of minimal value in array
 	for(i = 0; i < N; i++)
 		if(cpArray[i] > 0 && cpArray[i] < min)
 		{
@@ -92,15 +96,22 @@ void tsp(struct Graph* graph, int start)
 	
 	for(i = 0; i < N; i++)
 	{
+		// adding current node to visited (path)
 		visited[i] = curr;
+		
+		// setting tmp to index of minimal value of edge from current node neighbours (closest neighbour)
 		tmp = arrayMinIndex(graph->adjList[curr], visited);
 		if(i < N - 1)
 		{
+			// increasing length by length of the edge between current node and tmp node
 			length += graph->adjList[curr][tmp];
+			
+			// changing current node to tmp (closest neighbour)
 			curr = tmp;
 		}
 	}
 	
+	// increasing length by length of edge between last node and starting node
 	length += graph->adjList[curr][start];
 
 	for(i = 0; i < N; i++) printf("%d ", visited[i]);
