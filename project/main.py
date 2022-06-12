@@ -1,7 +1,8 @@
 import pygame
-from checkers.constants import PIECE_COLOR_BLACK, SQUARE_SIZE, WIDTH, HEIGHT
+from checkers.constants import PIECE_COLOR_BLACK, PIECE_COLOR_WHITE, SQUARE_SIZE, WIDTH, HEIGHT
 from checkers.board import Board
 from checkers.game import Game
+from minmax.algorithm import minmax
 
 FPS = 60
 
@@ -22,8 +23,13 @@ def main():
     while run:
         clock.tick(FPS)
 
+        #if game.turn == PIECE_COLOR_WHITE:
+        #    value, new_board = minmax(game.get_board(), 4, PIECE_COLOR_WHITE, game)
+        #    game.ai_move(new_board)
+
         if game.winner() != None:
             print(game.winner())
+            run = False
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

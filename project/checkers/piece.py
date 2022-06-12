@@ -20,7 +20,8 @@ class Piece:
         self.y = SQUARE_SIZE * self.row + SQUARE_SIZE // 2
 
     def make_king(self):
-        self.king = True
+        if not self.king:
+            self.king = True
 
     def draw(self, win):
         radius = SQUARE_SIZE // 2 - self.PADDING
