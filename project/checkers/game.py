@@ -18,6 +18,7 @@ class Game:
         self.board = Board()
         self.turn = PIECE_COLOR_BLACK
         self.valid_moves = {}
+        self.skipped = False
 
     def winner(self):
         return self.board.winner()
@@ -44,9 +45,11 @@ class Game:
         piece = self.board.get_piece(row, col)
         if self.selected and piece == 0 and (row, col) in self.valid_moves:
             self.board.move(self.selected, row, col)
-            skipped = self.valid_moves[(row, col)]
-            if skipped:
-                self.board.remove(skipped)
+            if self.valid_moves[(row, col)] != 0:
+                self.board.remove(self.valid_moves[(row, col)])
+
+                if self.board.get_valid_moves(self.valid_moves[(row, col)]):
+                    self.change_turn()
             self.change_turn()
         else:
             return False
@@ -54,7 +57,7 @@ class Game:
         return True
 
     def draw_valid_moves(self, moves):
-        for move in moves:
+        for move in moves.keys():
             row, col = move
             pygame.draw.rect(self.win, BG_COLOR_YELLOW, (col * SQUARE_SIZE + 1, row * SQUARE_SIZE + 1, SQUARE_SIZE - 2, SQUARE_SIZE - 2))
 
@@ -64,3 +67,10 @@ class Game:
             self.turn = PIECE_COLOR_WHITE
         else:
             self.turn = PIECE_COLOR_BLACK
+
+    def get_board(self):
+        return self.board
+
+    def ai_move(self, board):
+        self.board = board
+        self.change_turn()
